@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ChatBot</title>
+  </head>
+  <body>
+    <div class="js-container"></div>
+
+    <script src="https://unpkg.com/supersimpledev/dayjs.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+    <script type="text/babel">
+
+      function ChatInput(){
+        return (
+          <div>
+            <input 
+              placeholder = "Send a message to the chatBot" 
+              size = "30"
+               /> 
+            <button>Send </button>
+          </div> // fragments
+        );
+      } 
+
+      function ChatMessage({message , sender}){  //this format do the same thing as in line 30
+        //const message = props.message; 
+        //const sender = props.sender;
+
+        //const {message , sender} = props;  //this works same as above two
+
+
+        /*
+        if(sender === 'robot'){
+          return (
+             <div>
+              <img src = "robot.png" width = "50" />
+          {message}
+          
+             </div>
+          );
+        }
+          */
+
+        return(
+        <div>
+          {sender === 'robot' &&  <img src = "robot.png" width = "50" />}
+          {message}
+          {sender === 'user' && <img src = "user.png" width = "50"></img>}
+        </div>
+        );
+      }
+
+      function App (){
+        return (
+          <div>
+          
+            <ChatInput />
+            <ChatMessage message = "hello chatBot" sender = "user"/>
+            <ChatMessage message = "Hello! How can I help you" sender = "robot"/>
+            <ChatMessage message = "Can you get me todays date?" sender = "user" />
+            <ChatMessage message = "Today is december 31 " sender = "robot"/>
+        </div>
+        );
+      }
+
+      const container = document.querySelector('.js-container');
+      ReactDOM.createRoot(container).render(<App/>);
+
+      
+    </script>
+  </body>
+</html>
