@@ -11,27 +11,67 @@
     <script src="https://unpkg.com/supersimpledev/react.js"></script>
     <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
 
+    <script src="https://unpkg.com/supersimpledev/chatbot.js"></script>
+
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
     <script type="text/babel">
+      function ChatInput({chatMessages , setChatMessages}) {
+        const [inputText , setInputText] = React.useState('');
+        
 
-      function ChatInput(){
+        function saveInputText(event){
+          setInputText(event.target.value);
+        }
+
+      
+        function sendMessage(){
+
+          const newChatMessages = [
+         ...chatMessages ,   //... is spread operator to create the copy of the existing one
+         {
+          message : inputText,
+          sender : 'user',
+          id: crypto.randomUUID()
+         }
+         ];
+
+         setChatMessages(newChatMessages);
+
+
+         const response = Chatbot.getResponse(inputText);
+         setChatMessages([
+         ...newChatMessages ,   //... is spread operator to create the copy of the existing one
+         {
+          message : response,
+          sender : 'robot',
+          id: crypto.randomUUID()
+         }
+         ]);
+
+         setInputText('');
+        }
+          
         return (
           <div>
-            <input 
-              placeholder = "Send a message to the chatBot" 
-              size = "30"
-               /> 
-            <button>Send </button>
+            <input
+             placeholder="Send a message to the chatBot" 
+             size="30" 
+             onChange ={saveInputText}
+             value = {inputText}
+             />
+            <button 
+            onClick = {sendMessage}
+            >Send </button>
           </div> // fragments
         );
-      } 
+      }
 
-      function ChatMessage({message , sender}){  //this format do the same thing as in line 30
-        //const message = props.message; 
+      function ChatMessage({ message, sender }) {
+        //this format do the same thing as in line 30
+        //const message = props.message;
         //const sender = props.sender;
 
         //const {message , sender} = props;  //this works same as above two
-
 
         /*
         if(sender === 'robot'){
@@ -45,32 +85,82 @@
         }
           */
 
-        return(
-        <div>
-          {sender === 'robot' &&  <img src = "robot.png" width = "50" />}
-          {message}
-          {sender === 'user' && <img src = "user.png" width = "50"></img>}
-        </div>
-        );
-      }
-
-      function App (){
         return (
           <div>
-          
-            <ChatInput />
-            <ChatMessage message = "hello chatBot" sender = "user"/>
-            <ChatMessage message = "Hello! How can I help you" sender = "robot"/>
-            <ChatMessage message = "Can you get me todays date?" sender = "user" />
-            <ChatMessage message = "Today is december 31 " sender = "robot"/>
-        </div>
+            {sender === "robot" && <img src="robot.png" width="50" />}
+            {message}
+            {sender === "user" && <img src="user.png" width="50"></img>}
+          </div>
         );
       }
 
-      const container = document.querySelector('.js-container');
-      ReactDOM.createRoot(container).render(<App/>);
+      function ChatMessages({chatMessages}) {
+        //learning state : by how to convert chat messages into the state
+        // state = data that is connected to the HTML , when we update this data , it will the update the HTML
 
+       
+        
+
+        return (
+          <>
       
+            {chatMessages.map((chatMessage) => {
+              return (
+                <ChatMessage
+                  message={chatMessage.message}
+                  sender={chatMessage.sender}
+                  key={chatMessage.id}
+                />
+              );
+            })}
+          </>
+        );
+      }
+
+      function App() {
+
+        const [chatMessages , setChatMessages]=  React.useState([
+          {
+            message: "hello chatBot",
+            sender: "user",
+            id: "id1",
+          },
+          {
+            message: "Hello! How can I help you",
+            sender: "robot",
+            id: "id2",
+          },
+          {
+            message: "Can you get me todays date?",
+            sender: "user",
+            id: "id3",
+          },
+          {
+            message: "Today is december 31",
+            sender: "robot",
+            id: "id4",
+          },
+        ]);
+        // const [chatMessages, setChatMessages ] = array;  // array destructuring
+
+       /* const chatMessages  = array[0];
+        const setChatMessages =  array[1]; */
+
+        return (
+          <div>
+             <ChatInput 
+             chatMessages = {chatMessages}
+             setChatMessages = {setChatMessages}
+             />
+            <ChatMessages
+            chatMessages = {chatMessages}
+            />
+          </div>
+        );
+      }
+
+      const container = document.querySelector(".js-container");
+      ReactDOM.createRoot(container).render(<App />);
     </script>
   </body>
 </html>
