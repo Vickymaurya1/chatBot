@@ -11,48 +11,58 @@
     <script src="https://unpkg.com/supersimpledev/dayjs.js"></script>
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
     <script type="text/babel">
-      function ProductDetails({ name, price, discountPrice, images }) {
+
+      function InputMessage() {
         
         return (
           <div>
-         <p>  { name}</p>  
-         <img src = {images} width = "200" height = "150" /> 
-         {discountPrice ? (
-            <> 
-            <p> <del>Price : $ {price} </del> 
-            <p>  Price : $ {discountPrice} </p>
-            </p>
-            </>  
-         ) : (
-          <p> Price : ${price}</p>
+         <input 
+         placeholder = "Send message to the chatBot" size = "30" /> 
 
-         )}
-         <button> Bag me dalo </button>
+         <button> Send</button>
           </div>
+        
         );
+      }
+
+      function ChatMessage({message , sender }){
+        return (
+          <div> 
+            
+            
+            {sender === "robot" && (
+              <img src = "robot.png" width = "50" />
+            )}
+            {message}
+            {sender === "user" && (
+              <img src = "user.png" width = "50" />
+            )}
+            
+          </div>
+        )
       }
 
       function App() {
         return (
           <>
-            <ProductDetails
-            name = "cotton socks"
-            images = "cotton-socks.png"
-            price = "10.90"
-            discountPrice = "5.45"
-      
-            />
-            <ProductDetails
-            name = "Tennis ball"
-            images = "tennis-balls.png"
-            price = "10"
-            />
-            <ProductDetails 
-            name = "plain t-shirt"
-            images = "plain-t-shirt.png"
-            price = "15"
-            discountPrice = "10"
-            />
+           <InputMessage/>
+           <ChatMessage 
+           message = "hello chatbot"
+           sender = "user"
+           />
+           <ChatMessage 
+           message = "hi! how can I help you?"
+           sender = "robot"
+           />
+           <ChatMessage 
+           message = "can you get me todays date?"
+           sender = "user"
+           />
+           <ChatMessage 
+           message = "Today date is sept 27"
+           sender = "robot"
+           />
+           
           </>
         );
       }
