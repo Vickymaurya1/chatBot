@@ -15,53 +15,47 @@
 
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
     <script type="text/babel">
-      function ChatInput({chatMessages , setChatMessages}) {
-        const [inputText , setInputText] = React.useState('');
-        
+      function ChatInput({ chatMessages, setChatMessages }) {
+        const [inputText, setInputText] = React.useState(""); // "" intial denotes:- inital  value of the box is emypt
 
-        function saveInputText(event){
+        function saveInputText(event) {
           setInputText(event.target.value);
         }
 
-      
-        function sendMessage(){
-
+        function sendMessage() {
           const newChatMessages = [
-         ...chatMessages ,   //... is spread operator to create the copy of the existing one
-         {
-          message : inputText,
-          sender : 'user',
-          id: crypto.randomUUID()
-         }
-         ];
+            ...chatMessages, //... is spread operator to create the copy of the existing one
+            {
+              message: inputText,
+              sender: "user",
+              id: crypto.randomUUID(),
+            },
+          ];
 
-         setChatMessages(newChatMessages);
+          setChatMessages(newChatMessages);
 
+          const response = Chatbot.getResponse(inputText);
+          setChatMessages([
+            ...newChatMessages, // contains our message 
+            {
+              message: response,
+              sender: "robot",
+              id: crypto.randomUUID(),
+            },
+          ]);
 
-         const response = Chatbot.getResponse(inputText);
-         setChatMessages([
-         ...newChatMessages ,   //... is spread operator to create the copy of the existing one
-         {
-          message : response,
-          sender : 'robot',
-          id: crypto.randomUUID()
-         }
-         ]);
-
-         setInputText('');
+          setInputText("");
         }
-          
+
         return (
           <div>
             <input
-             placeholder="Send a message to the chatBot" 
-             size="30" 
-             onChange ={saveInputText}
-             value = {inputText}
-             />
-            <button 
-            onClick = {sendMessage}
-            >Send </button>
+              placeholder="Send a message to the chatBot"
+              size="30"
+              onChange={saveInputText}
+              value={inputText}
+            />
+            <button onClick={sendMessage}>Send </button>
           </div> // fragments
         );
       }
@@ -94,16 +88,12 @@
         );
       }
 
-      function ChatMessages({chatMessages}) {
+      function ChatMessages({ chatMessages }) {
         //learning state : by how to convert chat messages into the state
         // state = data that is connected to the HTML , when we update this data , it will the update the HTML
 
-       
-        
-
         return (
           <>
-      
             {chatMessages.map((chatMessage) => {
               return (
                 <ChatMessage
@@ -118,8 +108,8 @@
       }
 
       function App() {
-
-        const [chatMessages , setChatMessages]=  React.useState([
+        //saving the data :- through array to generate the components of the messages dynamically
+        const [chatMessages, setChatMessages] = React.useState([
           {
             message: "hello chatBot",
             sender: "user",
@@ -143,18 +133,16 @@
         ]);
         // const [chatMessages, setChatMessages ] = array;  // array destructuring
 
-       /* const chatMessages  = array[0];
+        /* const chatMessages  = array[0];
         const setChatMessages =  array[1]; */
 
         return (
           <div>
-             <ChatInput 
-             chatMessages = {chatMessages}
-             setChatMessages = {setChatMessages}
-             />
-            <ChatMessages
-            chatMessages = {chatMessages}
+            <ChatInput
+              chatMessages={chatMessages}
+              setChatMessages={setChatMessages}
             />
+            <ChatMessages chatMessages={chatMessages} />
           </div>
         );
       }
