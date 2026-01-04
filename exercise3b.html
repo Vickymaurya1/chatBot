@@ -12,34 +12,45 @@
     <script src="https://unpkg.com/supersimpledev/babel.js"></script>
     <script type="text/babel">
 
-        function ButtonClick(){
-            const [count , setCount] = React.useState(0);
+        
 
-            function handleClick(){
-  
-                   setCount(count+1);
-                   console.log("clicked");
+      function ButtonClick({ count, setCount }) {
+         
 
-            }
-
-            return (
-                <button onClick = {handleClick}  >
-                    clicked {count} times
-                </button>
-            )
+        function handleClick() {
+          setCount(count + 1);
+          console.log('clicked')
         }
-   
+        function resetToZero(){
+           setCount(0);
+        }
 
-    function App (){
         return (
             <>
-            <ButtonClick/>
-            </>
-        )
-    }; 
+          <button onClick={handleClick}>
+            clicked {count} {count === 1 || count === 0 ? "time" : "times"}
+          </button>
+        
+          <button onClick = {resetToZero}> Reset</button>
+          </>
+        );
+      }
 
-
-
+      function App() {
+       const [count, setCount] = React.useState(0);
+        return (
+          <>
+            <ButtonClick  
+            count = {count}
+            setCount = {setCount}
+            />
+            <ButtonClick 
+            count = {count}
+            setCount = {setCount}
+            />
+          </>
+        );
+      }
 
       const container = document.querySelector(".js-container");
       ReactDOM.createRoot(container).render(<App />);
